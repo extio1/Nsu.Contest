@@ -4,13 +4,7 @@ using Nsu.Contest.Entity;
 
 public class Director
 {
-    private double _harmonicMeanAvg { set; get; }
-    private double _n { set; get; }
-    public Director() 
-    { 
-        _harmonicMeanAvg = 0; 
-        _n = 0; 
-    }
+    public Director() {}
 
     /// <summary>
     /// Calculate mean harmonic of teams distribution
@@ -20,8 +14,14 @@ public class Director
     /// <param name="teamleadsWishlists"></param>
     /// <param name="teams"></param>
     /// <returns>Mean harmonic of teams distribution</returns>
-    public double EstimateTeams(int nPartisipants, List<Wishlist> juniorsWishlists, List<Wishlist> teamleadsWishlists, IEnumerable<Team> teams)
+    public double EstimateTeams(IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Team> teams)
     {
+        if((juniorsWishlists.Count() != teamleadsWishlists.Count())  || 
+           (teamleadsWishlists.Count() != teams.Count()))
+        {
+            throw new ArgumentException("All three collections must be the same length.");
+        }
+
         var sumReciprocals = 0.0;
 
         foreach (var team in teams)
@@ -30,7 +30,7 @@ public class Director
             sumReciprocals += 1.0 / team.TeamLead.GetSatisfactionPoints(teamleadsWishlists, team.Junior);
         }
 
-        return nPartisipants / sumReciprocals;
+        return  teams.Count() / sumReciprocals;
     }
 }
 

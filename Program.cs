@@ -14,15 +14,13 @@ class Program
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.Configure<Configuration>(context.Configuration.GetSection("contest"));
+                services.Configure<Configuration>(context.Configuration.GetSection("Contest"));
 
                 services.AddSingleton<ITeamBuildingStrategy, RandomTeamBuildingStrategy>();
                 services.AddSingleton<RandomGenerator>();
                 services.AddSingleton<EmployeeReader>();
                 services.AddSingleton<Director>();
                 services.AddSingleton<Manager>();
-
-                services.AddTransient<Contest>();
 
                 services.AddHostedService<ContestRunner>();
             })

@@ -1,5 +1,6 @@
 namespace Nsu.Contest.Contest;
 
+using Microsoft.Extensions.Options;
 using Nsu.Contest.Util;
 using Nsu.Contest.Entity;
 using Nsu.Contest.Director;
@@ -9,23 +10,22 @@ public class Contest
 {
     readonly private Director _director;
     readonly private Manager _manager;
-    readonly private IOptions<Configuration> _configuration;
     readonly private RandomGenerator _randomGenerator;
-    public Contest(Director director, Manager manager, IOptions<Configuration> configuration, RandomGenerator randomGenerator)
+    // Можно сделать RandomGenerator утилитный классом, чтобы не передавать ссылку на него сюда,
+    // он все равно синглтон, состояния никакого нет?
+    public Contest(Director director, Manager manager, RandomGenerator randomGenerator)
     {
-        Console.WriteLine("CONTEST OBJECT CREATED");
         _director = director;
         _manager = manager;
-        _configuration = configuration;
         _randomGenerator = randomGenerator;
     }
     public double Run(IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors)
     {
-        var juniorsWishlists = _randomGenerator.GenerateWishlists(_configuration.Value.nRounds);
-        var teamleadsWishlists = _randomGenerator.GenerateWishlists(_configuration.Value.nRounds);
+        var juniorsWishlists = _randomGenerator.GenerateWishlists(juniors.Count());
+        var teamleadsWishlists = _randomGenerator.GenerateWishlists(teamleads.Count());
 
         var teams = _manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
 
-        return _director.EstimateTeams(_configuration.Value.nRounds, juniorsWishlists, teamleadsWishlists, teams);
+        return _director.EstimateTeams(juniorsWishlists, teamleadsWishlists, teams);
     }
 }
