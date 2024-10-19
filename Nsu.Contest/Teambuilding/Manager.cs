@@ -12,9 +12,9 @@ public class Manager
     }
 
     public IEnumerable<Team> BuildTeams(
-        IEnumerable<Employee> teamLeads, IEnumerable<Employee> juniors,
-        IEnumerable<Wishlist> teamLeadsWishlists, IEnumerable<Wishlist> juniorsWishlists)
+        IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+        IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists)
     {
-        return _teamBuildingStrategy.BuildTeams(teamLeads, juniors, teamLeadsWishlists, juniorsWishlists);
+        return _teamBuildingStrategy.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
     }
 }

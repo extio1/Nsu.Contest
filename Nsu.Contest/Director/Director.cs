@@ -26,8 +26,8 @@ public class Director
 
         foreach (var team in teams)
         {
-            sumReciprocals += 1.0 / team.Junior.GetSatisfactionPoints(juniorsWishlists, team.TeamLead);
-            sumReciprocals += 1.0 / team.TeamLead.GetSatisfactionPoints(teamleadsWishlists, team.Junior);
+            sumReciprocals += 1.0 / team.Junior.GetSatisfactionPoints(juniorsWishlists, team.Teamlead);
+            sumReciprocals += 1.0 / team.Teamlead.GetSatisfactionPoints(teamleadsWishlists, team.Junior);
         }
 
         return  teams.Count() / sumReciprocals;

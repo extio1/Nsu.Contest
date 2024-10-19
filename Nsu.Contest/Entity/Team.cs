@@ -1,3 +1,3 @@
 namespace Nsu.Contest.Entity;
 
-public record Team(Employee TeamLead, Employee Junior);
+public record Team(Employee Teamlead, Employee Junior);
