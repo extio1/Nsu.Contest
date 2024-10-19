@@ -7,12 +7,6 @@ using Microsoft.Extensions.Options;
 
 public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
 {
-    private readonly RandomGenerator _randomGenerator;
-
-    public RandomTeamBuildingStrategy(RandomGenerator randomGenerator)
-    {
-        _randomGenerator = randomGenerator;
-    }
 
     /// <summary>
     /// Random algorithm of teambuilding.
@@ -34,15 +28,16 @@ public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
             throw new ArgumentException("All collections must be the same length.");
         }
 
-        var teams = new List<Team>();
+        var employeesCount = teamleads.Count();
+        var teams = new List<Team>(employeesCount);
 
-        var randPermteamleads = _randomGenerator.GenerateRandomPermutation(juniors.Count());
-        var randPermJuniors = _randomGenerator.GenerateRandomPermutation(juniors.Count());
+        var randPermteamleads = RandomGenerator.GeneratePermutation(employeesCount);
+        var randPermJuniors = RandomGenerator.GeneratePermutation(employeesCount);
 
         var teamleadsList = new List<Employee>(teamleads);
         var juniorsList = new List<Employee>(juniors);
 
-        for (var i = 0; i < 20; i++)
+        for (var i = 0; i < employeesCount; i++)
         {
             teams.Add(new Team(teamleadsList[randPermteamleads[i] - 1], juniorsList[randPermJuniors[i] - 1]));
         }

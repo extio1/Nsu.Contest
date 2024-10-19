@@ -1,10 +1,12 @@
 namespace Nsu.Contest.Util;
 
+using System;
+using System.Text;
 using Nsu.Contest.Entity;
 
 public class RandomGenerator
 {
-    public int[] GenerateRandomPermutation(int n)
+    public static int[] GeneratePermutation(int n)
     {
         var numbers = Enumerable.Range(1, n).ToArray();
         var rand = new Random();
@@ -17,14 +19,18 @@ public class RandomGenerator
         return numbers;
     }
 
-    public List<Wishlist> GenerateWishlists(int n)
+    public static string GenerateRandomString(int length)
     {
-        var wishlists = new List<Wishlist>(n);
-        for (var i = 1; i <= n; ++i)
+        const string chars = "abcdefghijklmnopqrstuvwxyz";
+        Random random = new Random();
+        StringBuilder result = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++)
         {
-            var prioritiesForEmpl = GenerateRandomPermutation(n);
-            wishlists.Add(new Wishlist(i, prioritiesForEmpl));
+            int index = random.Next(chars.Length);
+            result.Append(chars[index]);
         }
-        return wishlists;
+
+        return result.ToString();
     }
 }

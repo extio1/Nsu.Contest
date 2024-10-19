@@ -13,11 +13,11 @@ public class ContestRunner : IHostedService
     readonly private EmployeeReader _employeeReader;
     readonly private Director _director;
     readonly private Manager _manager;
-    readonly private RandomGenerator _randomGenerator;
+    readonly private WishlistGenerator _wishlistGenerator;
     public ContestRunner(IOptions<Configuration> configuration, EmployeeReader employeeReader,
-                         Director director, Manager manager, RandomGenerator randomGenerator)
+                         Director director, Manager manager, WishlistGenerator wishlistGenerator)
     {
-        _randomGenerator = randomGenerator;
+        _wishlistGenerator = wishlistGenerator;
         _director = director;
         _manager = manager;
         _configuration = configuration;
@@ -34,7 +34,7 @@ public class ContestRunner : IHostedService
             // Вопрос к тому, что контесты у меня по факту только читают списки тимлидов и джунов
             // т.е. не конкурируют за них -> взаимное исключение или копирование не обязательно 
             tasks.Add(
-                Task.Run(() => new Contest(_director, _manager, _randomGenerator).Run(teamleads, juniors))
+                Task.Run(() => new Contest(_director, _manager, _wishlistGenerator).Run(teamleads, juniors))
             );
         }
 
