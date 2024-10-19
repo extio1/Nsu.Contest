@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nsu.Contest", "Nsu.Contest.csproj", "{A7554220-5E8D-4EB2-8010-F1A4507D4B3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nsu.Contest", "Nsu.Contest\Nsu.Contest.csproj", "{A7554220-5E8D-4EB2-8010-F1A4507D4B3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nsu.Contest.Test", "Nsu.Contest.Test\Nsu.Contest.Test.csproj", "{BAA71310-5E56-43F1-9AEC-F94DCC9E1FFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A7554220-5E8D-4EB2-8010-F1A4507D4B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7554220-5E8D-4EB2-8010-F1A4507D4B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7554220-5E8D-4EB2-8010-F1A4507D4B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAA71310-5E56-43F1-9AEC-F94DCC9E1FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA71310-5E56-43F1-9AEC-F94DCC9E1FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA71310-5E56-43F1-9AEC-F94DCC9E1FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA71310-5E56-43F1-9AEC-F94DCC9E1FFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
