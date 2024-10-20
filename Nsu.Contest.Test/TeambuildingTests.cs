@@ -6,10 +6,10 @@ using Nsu.Contest.Teambuilding.Strategy;
 
 using Moq;
 
-public class TeambuildingTests : JuniorsTeamleadsAndWishlistsTestData
+public class TeambuildingTests : JuniorsTeamleadsWishlistsTestData
 {
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
+    [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_TeamsCountEqualToEmployeesCount(
         IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
@@ -24,7 +24,7 @@ public class TeambuildingTests : JuniorsTeamleadsAndWishlistsTestData
     }
 
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
+    [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_DistributionRight(
         IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists
@@ -41,7 +41,7 @@ public class TeambuildingTests : JuniorsTeamleadsAndWishlistsTestData
     }
 
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
+    [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenBuildingTeams_CallsStrategyOnlyOnce(
         IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
