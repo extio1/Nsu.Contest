@@ -1,27 +1,22 @@
 namespace Nsu.Contest.Test;
 
-using Nsu.Contest.Util;
 using Nsu.Contest.Entity;
 using Nsu.Contest.Teambuilding;
 using Nsu.Contest.Teambuilding.Strategy;
 
 using Moq;
 
-// TODO: Возможно выделить свой класс для данных, потому что в theory методах всегда на входе
-// требуются только juniors, teamleds, juniorsWishlists, teamleadsWishlists
-public class TeambuildingTests : JuniorsTeamleadsTestData
+public class TeambuildingTests : JuniorsTeamleadsAndWishlistsTestData
 {
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsLists))]
+    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_TeamsCountEqualToEmployeesCount(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads
+        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
     )
     {
         var manager = new Manager(new RandomTeamBuildingStrategy());
-        var wishlistGenerator = new WishlistGenerator();
-        var juniorsWishlists = wishlistGenerator.GenerateWishlists(juniors, teamleads);
-        var teamleadsWishlists = wishlistGenerator.GenerateWishlists(teamleads, juniors);
-    
+
         var teams = manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
 
         Assert.Equal(teams.Count(), juniors.Count());
@@ -29,15 +24,13 @@ public class TeambuildingTests : JuniorsTeamleadsTestData
     }
 
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsLists))]
+    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_DistributionRight(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads
+        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists
     )
     {
         var manager = new Manager(new EqualIdsBuildingStrategy());
-        var wishlistGenerator = new WishlistGenerator();
-        var juniorsWishlists = wishlistGenerator.GenerateWishlists(juniors, teamleads);
-        var teamleadsWishlists = wishlistGenerator.GenerateWishlists(teamleads, juniors);
         
         var teams = manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
         
@@ -48,19 +41,14 @@ public class TeambuildingTests : JuniorsTeamleadsTestData
     }
 
     [Theory]
-    [MemberData(nameof(JuniorsTeamleadsLists))]
+    [MemberData(nameof(JuniorsTeamleadsAndWishlists))]
     public void BuildTeams_WhenBuildingTeams_CallsStrategyOnlyOnce(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads
+        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
     )
     {
         var mockService = new Mock<ITeamBuildingStrategy>();
         var manager = new Manager(mockService.Object);
-        var wishlistGenerator = new WishlistGenerator();
-        var juniorsWishlists = wishlistGenerator.GenerateWishlists(juniors, teamleads);
-        var teamleadsWishlists = wishlistGenerator.GenerateWishlists(teamleads, juniors);
-
-        
-        // mock.setup(service => service.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists))
         
         manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
 

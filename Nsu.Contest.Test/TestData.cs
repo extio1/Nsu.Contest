@@ -7,7 +7,7 @@ public abstract class TestData
 {
     private const int UserTestDataNamesLength = 10;
     
-    public static List<Employee> generateEmployeeList(int length)
+    public static List<Employee> GenerateEmployeeList(int length)
     {
         var list = new List<Employee>(length);
         for (var i = 1; i <= length; i++) {
@@ -21,30 +21,37 @@ public class JuniorsTeamleadsTestData : TestData
 {
     public static IEnumerable<object[]> JuniorsTeamleadsLists()
     {
-        yield return new object[] {
-            generateEmployeeList(10),
-            generateEmployeeList(10)
-        };
-        yield return new object[] {
-            generateEmployeeList(20),
-            generateEmployeeList(20)
-        };
-        yield return new object[] {
-            generateEmployeeList(5),
-            generateEmployeeList(5)
-        };
-        yield return new object[] {
-            generateEmployeeList(42),
-            generateEmployeeList(42)
-        };
-        yield return new object[] {
-            generateEmployeeList(100),
-            generateEmployeeList(100)
-        };
-        yield return new object[] {
-            generateEmployeeList(0),
-            generateEmployeeList(0)
-        };
+        yield return GenerateData(10);
+        yield return GenerateData(20);
+        yield return GenerateData(5);
+        yield return GenerateData(42);
+        yield return GenerateData(1000);
+        yield return GenerateData(0);
+    }
+    private static object[] GenerateData(int n){
+        return new object[]{GenerateEmployeeList(n), GenerateEmployeeList(n)};
+    }
+}
+
+public class JuniorsTeamleadsAndWishlistsTestData : TestData
+{
+    public static IEnumerable<object[]> JuniorsTeamleadsAndWishlists()
+    {
+        yield return GenerateData(10);
+        yield return GenerateData(20);
+        yield return GenerateData(5);
+        yield return GenerateData(42);
+        yield return GenerateData(1000);
+        yield return GenerateData(0);
+    }
+    private static object[] GenerateData(int n){
+        WishlistGenerator wishlistGenerator = new WishlistGenerator();
+        var juniours = GenerateEmployeeList(n);
+        var teamleads = GenerateEmployeeList(n);
+        var junioursWishlists = wishlistGenerator.GenerateWishlists(juniours, teamleads);
+        var teamleadsWishlists = wishlistGenerator.GenerateWishlists(teamleads, juniours);
+
+        return new object[]{juniours, teamleads, junioursWishlists, teamleadsWishlists};
     }
 }
 
