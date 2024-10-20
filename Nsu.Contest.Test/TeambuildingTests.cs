@@ -71,7 +71,6 @@ public class TeambuildingTests : JuniorsTeamleadsAndWishlistsTestData
         mockService.Setup(s => s.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists))
                 .Throws(new ArgumentException("All collections must be the same length."));
         
-        
         var action = () => manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
         var exception = Assert.Throws<ArgumentException>(action);
         Assert.Equal("All collections must be the same length.", exception.Message);
