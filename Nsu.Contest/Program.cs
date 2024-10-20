@@ -17,6 +17,7 @@ class Program
                 services.Configure<Configuration>(context.Configuration.GetSection("Contest"));
 
                 services.AddSingleton<ITeamBuildingStrategy, RandomTeamBuildingStrategy>();
+                services.AddSingleton<ITeamEstimatingStrategy, HarmonicMean>();
                 services.AddSingleton<WishlistGenerator>();
                 services.AddSingleton<EmployeeReader>();
                 services.AddSingleton<Director>();

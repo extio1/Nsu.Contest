@@ -4,7 +4,11 @@ using Nsu.Contest.Entity;
 
 public class Director
 {
-    public Director() {}
+    ITeamEstimatingStrategy _estimatingStrategy;
+    public Director(ITeamEstimatingStrategy estimatingStrategy) 
+    {
+        _estimatingStrategy = estimatingStrategy;
+    }
 
     /// <summary>
     /// Calculate mean harmonic of teams distribution
@@ -22,15 +26,10 @@ public class Director
             throw new ArgumentException("All three collections must be the same length.");
         }
 
-        var sumReciprocals = 0.0;
+        var employeePoints = teams.Select(t => t.Junior.GetSatisfactionPoint(juniorsWishlists, t.Teamlead))
+        .Concat(teams.Select(t => t.Teamlead.GetSatisfactionPoint(teamleadsWishlists, t.Junior))).ToArray();
 
-        foreach (var team in teams)
-        {
-            sumReciprocals += 1.0 / team.Junior.GetSatisfactionPoints(juniorsWishlists, team.Teamlead);
-            sumReciprocals += 1.0 / team.Teamlead.GetSatisfactionPoints(teamleadsWishlists, team.Junior);
-        }
-
-        return  teams.Count() / sumReciprocals;
+        return _estimatingStrategy.Calculate(employeePoints);
     }
 }
 
