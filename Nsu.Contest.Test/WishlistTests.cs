@@ -18,7 +18,7 @@ public class WishlistGenerationTests : JuniorsTeamleadsTestData
         Assert.Equal(wishlists.Count(), juniors.Count());
         foreach (var wishlist in wishlists)
         {
-            Assert.Equal(wishlist.DesiredEmployees.Count(), teamleads.Count());
+            Assert.Equal(wishlist.DesiredEmployees.Length, teamleads.Count());
         }
     }
 

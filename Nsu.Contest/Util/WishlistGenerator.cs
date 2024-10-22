@@ -2,13 +2,13 @@ namespace Nsu.Contest.Util;
 
 using Nsu.Contest.Entity;
 
-public class WishlistGenerator
+public class WishlistGenerator : IWishlistGenerator
 {
     // TODO: probably refactor, because now GenerateWishlists break encapsulation of Employee
     // (knows that they uses integers as Id stating with 1) 
-    public List<Wishlist> GenerateWishlists(IEnumerable<Employee> forEmpls, IEnumerable<Employee> ofEmpls)
+    public IEnumerable<Wishlist> GenerateWishlists(IEnumerable<Employee> forEmpls, IEnumerable<Employee> ofEmpls)
     {
-        if((forEmpls.Count() != ofEmpls.Count()))
+        if(forEmpls.Count() != ofEmpls.Count())
         {
             throw new ArgumentException("All collections must be the same length.");
         }

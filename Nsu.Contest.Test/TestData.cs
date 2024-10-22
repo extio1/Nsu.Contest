@@ -18,6 +18,44 @@ public abstract class TestData
         }
         return list;
     }
+    public static (List<Employee>, List<Employee>) GenerateJuniorsTeamleadsLists(int n)
+    {
+        return (GenerateEmployeeList(n), GenerateEmployeeList(n));
+    }
+    public static (IEnumerable<Wishlist>, IEnumerable<Wishlist>) GenerateWishlists(IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors)
+    {
+        WishlistGenerator wishlistGenerator = new();
+        return (
+            wishlistGenerator.GenerateWishlists(teamleads, juniors),
+            wishlistGenerator.GenerateWishlists(juniors, teamleads)
+        );
+    }
+    public static IEnumerable<Team> GenerateTeams(
+        IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+        IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
+        )
+    {
+        Manager manager = new(new EqualIdsBuildingStrategy());
+        return manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
+    }
+
+    public static (IEnumerable<Employee>, IEnumerable<Employee>, 
+            IEnumerable<Wishlist>, IEnumerable<Wishlist>, 
+            IEnumerable<Team>, double) 
+    GenerateAllForContest(int n)
+    {
+        var harmonicMean = new HarmonicMean();
+        var (teamleads, juniors) = GenerateJuniorsTeamleadsLists(n);
+        var (teamleadsWishlists, juniorsWishlists) = GenerateWishlists(teamleads, juniors);
+        var teams = GenerateTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
+
+        var points = teams.
+            Select(t => t.Junior.GetSatisfactionPoint(juniorsWishlists, t.Teamlead)).
+            Concat(teams.Select(t => t.Teamlead.GetSatisfactionPoint(teamleadsWishlists, t.Junior))).
+            ToArray();
+
+        return (teamleads, juniors, teamleadsWishlists, juniorsWishlists, teams, harmonicMean.Calculate(points));
+    }
 }
 
 public class JuniorsTeamleadsTestData : TestData
@@ -31,17 +69,13 @@ public class JuniorsTeamleadsTestData : TestData
         yield return GenerateEmployeeLists(1000);
         yield return GenerateEmployeeLists(0);
     }
-    public static (List<Employee>, List<Employee>) GenerateJuniorsTeamleadsLists(int n){
-        return (GenerateEmployeeList(n), GenerateEmployeeList(n));
-    }
-
-    public static object[] GenerateEmployeeLists(int n) {
+    private static object[] GenerateEmployeeLists(int n) {
         var (teamleads, juniors) = GenerateJuniorsTeamleadsLists(n);
         return new object[]{teamleads, juniors};
     }
 }
 
-public class JuniorsTeamleadsWishlistsTestData : JuniorsTeamleadsTestData
+public class JuniorsTeamleadsWishlistsTestData : TestData
 {
     public static IEnumerable<object[]> JuniorsTeamleadsWishlists()
     {
@@ -52,15 +86,6 @@ public class JuniorsTeamleadsWishlistsTestData : JuniorsTeamleadsTestData
         yield return GenerateJuniorsTeamleadsAndWishlists(1000);
         yield return GenerateJuniorsTeamleadsAndWishlists(0);
     }
-    public static (List<Wishlist>, List<Wishlist>) GenerateWishlists(IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors)
-    {
-        WishlistGenerator wishlistGenerator = new();
-        return (
-            wishlistGenerator.GenerateWishlists(teamleads, juniors),
-            wishlistGenerator.GenerateWishlists(juniors, teamleads)
-        );
-    }
-
     private static object[] GenerateJuniorsTeamleadsAndWishlists(int n){
         var (teamleads, juniors) = GenerateJuniorsTeamleadsLists(n);
         var (teamleadsWishlists, juniorsWishlists) = GenerateWishlists(teamleads, juniors);
@@ -69,7 +94,7 @@ public class JuniorsTeamleadsWishlistsTestData : JuniorsTeamleadsTestData
     }
 }
 
-public class WishlistsTeamsHarmonicTestData : JuniorsTeamleadsWishlistsTestData
+public class WishlistsTeamsHarmonicTestData : TestData
 {
     public static IEnumerable<object[]> WishlistsTeamsHarmonic()
     {
@@ -80,26 +105,27 @@ public class WishlistsTeamsHarmonicTestData : JuniorsTeamleadsWishlistsTestData
         yield return GenerateWishlistsTeamsHarmonic(1000);
         yield return GenerateWishlistsTeamsHarmonic(0);
     }
-    public static IEnumerable<Team> GenerateTeams(
-        IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
-        IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
-        )
-    {
-        Manager manager = new Manager(new EqualIdsBuildingStrategy());
-        return manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
-    }
-
     private static object[] GenerateWishlistsTeamsHarmonic(int n){
-        var harmonicMean = new HarmonicMean();
-        var (teamleads, juniors) = GenerateJuniorsTeamleadsLists(n);
-        var (teamleadsWishlists, juniorsWishlists) = GenerateWishlists(teamleads, juniors);
-        var teams = GenerateTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
-
-        var points = teams.
-            Select(t => t.Junior.GetSatisfactionPoint(juniorsWishlists, t.Teamlead)).
-            Concat(teams.Select(t => t.Teamlead.GetSatisfactionPoint(teamleadsWishlists, t.Junior))).
-            ToArray();
+        var (_, _, teamleadsWishlists, juniorsWishlists, teams, harmonic) = GenerateAllForContest(n);
         
-        return new object[]{teamleadsWishlists, juniorsWishlists, teams, harmonicMean.Calculate(points)};
+        return new object[]{teamleadsWishlists, juniorsWishlists, teams, harmonic};
+    }
+}
+
+// Использование случайно генерируемых данных в общем случае приводит к накоплению 
+// большой разнице ошибок между подсчетами среднего гармонического как фактического
+// и ожидаемого
+
+public class EmployeesHarmonicTestData : TestData
+{
+    public static IEnumerable<object[]> EmployeesHarmonic()
+    {
+        yield return new object[]{
+            new List<Employee>{new(1, "John"), new(2, "Sonya")},
+            new List<Employee>{new(1, "Alexa"), new(2, "Greg")},
+            new List<Wishlist>{new(1, new int[]{1, 2}), new(2, new int[]{1, 2})},
+            new List<Wishlist>{new(1, new int[]{2, 1}), new(2, new int[]{2, 1})},
+            1.333
+            };
     }
 }
