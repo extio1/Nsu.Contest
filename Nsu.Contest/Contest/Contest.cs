@@ -1,6 +1,5 @@
 namespace Nsu.Contest.Contest;
 
-using Microsoft.Extensions.Options;
 using Nsu.Contest.Util;
 using Nsu.Contest.Entity;
 using Nsu.Contest.Director;
@@ -10,10 +9,10 @@ public class Contest
 {
     readonly private Director _director;
     readonly private Manager _manager;
-    readonly private WishlistGenerator _wishlistGenerator;
+    readonly private IWishlistGenerator _wishlistGenerator;
     // Можно сделать WishlistGenerator утилитный классом, чтобы не передавать ссылку на него сюда,
     // он все равно синглтон, состояния никакого нет?
-    public Contest(Director director, Manager manager, WishlistGenerator wishlistGenerator)
+    public Contest(Director director, Manager manager, IWishlistGenerator wishlistGenerator)
     {
         _director = director;
         _manager = manager;
