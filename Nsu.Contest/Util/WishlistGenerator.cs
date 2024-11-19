@@ -4,8 +4,7 @@ using Nsu.Contest.Entity;
 
 public class WishlistGenerator : IWishlistGenerator
 {
-    // TODO: probably refactor, because now GenerateWishlists break encapsulation of Employee
-    // (knows that they uses integers as Id stating with 1) 
+
     public IEnumerable<Wishlist> GenerateWishlists(IEnumerable<Employee> forEmpls, IEnumerable<Employee> ofEmpls)
     {
         if(forEmpls.Count() != ofEmpls.Count())
@@ -16,10 +15,17 @@ public class WishlistGenerator : IWishlistGenerator
         var employeesCount = forEmpls.Count();
         var wishlists = new List<Wishlist>(employeesCount);
 
-        for (var i = 1; i <= employeesCount; ++i)
+        foreach (var forEmpl in forEmpls)
         {
             var prioritiesForEmpl = RandomGenerator.GeneratePermutation(employeesCount);
-            wishlists.Add(new Wishlist(i, prioritiesForEmpl));
+            wishlists.Add
+            (
+                new Wishlist
+                (
+                    forEmpl, 
+                    prioritiesForEmpl.Select(ind => ofEmpls.ElementAt(ind-1)).ToArray()
+                )
+            );
         }
 
         return wishlists;

@@ -11,7 +11,7 @@ public interface ITeamBuildingStrategy
     /// <param name="juniors">Джуны</param>
     /// <returns>Список команд</returns>
     IEnumerable<Team> BuildTeams(
-        IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+        IEnumerable<Teamlead> teamleads, IEnumerable<Junior> juniors,
         IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
     );
 }

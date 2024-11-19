@@ -11,7 +11,7 @@ public class TeambuildingTests : JuniorsTeamleadsWishlistsTestData
     [Theory]
     [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_TeamsCountEqualToEmployeesCount(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Junior> juniors, IEnumerable<Teamlead> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
     )
     {
@@ -26,7 +26,7 @@ public class TeambuildingTests : JuniorsTeamleadsWishlistsTestData
     [Theory]
     [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenJuniourTeamleadsKnown_DistributionRight(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Junior> juniors, IEnumerable<Teamlead> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists
     )
     {
@@ -43,7 +43,7 @@ public class TeambuildingTests : JuniorsTeamleadsWishlistsTestData
     [Theory]
     [MemberData(nameof(JuniorsTeamleadsWishlists))]
     public void BuildTeams_WhenBuildingTeams_CallsStrategyOnlyOnce(
-        IEnumerable<Employee> juniors, IEnumerable<Employee> teamleads,
+        IEnumerable<Junior> juniors, IEnumerable<Teamlead> teamleads,
         IEnumerable<Wishlist> juniorsWishlists, IEnumerable<Wishlist> teamleadsWishlists 
     )
     {
@@ -62,10 +62,10 @@ public class TeambuildingTests : JuniorsTeamleadsWishlistsTestData
     [Fact]
     public void BuildTeams_WhenBuildingTeamsOfDifferentSizes_ThrowsException()
     {
-        var juniors = new List<Employee>(){new(1, "John"), new(2, "John")};
-        var teamleads = new List<Employee>(){new(1, "Alexa")};
-        var juniorsWishlists = new List<Wishlist>(){new(1, new int[]{1}), new(2, new int[]{1})};
-        var teamleadsWishlists = new List<Wishlist>(){new(1, new int[]{2})};
+        var juniors = new List<Junior>(){new(1, "John"), new(2, "John")};
+        var teamleads = new List<Teamlead>(){new(1, "Alexa")};
+        var juniorsWishlists = new List<Wishlist>(){new(juniors[0], [teamleads[0]]), new(juniors[1], [teamleads[0]])};
+        var teamleadsWishlists = new List<Wishlist>(){new(juniors[0], [juniors[1]])};
         var mockService = new Mock<ITeamBuildingStrategy>();
         var manager = new Manager(mockService.Object);
         mockService.Setup(s => s.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists))

@@ -10,17 +10,17 @@ public abstract class TestData
 {
     private const int UserTestDataNamesLength = 10;
     
-    public static List<Employee> GenerateEmployeeList(int length)
+    public static List<T> GenerateEmployeeList<T>(int length) where T : Employee
     {
-        var list = new List<Employee>(length);
+        var list = new List<T>(length);
         for (var i = 1; i <= length; i++) {
-            list.Add(new Employee(i, RandomGenerator.GenerateRandomString(UserTestDataNamesLength)));
+            list.Add((T)Activator.CreateInstance(typeof(T), i, RandomGenerator.GenerateRandomString(UserTestDataNamesLength)));
         }
         return list;
     }
-    public static (List<Employee>, List<Employee>) GenerateJuniorsTeamleadsLists(int n)
+    public static (List<Junior>, List<Teamlead>) GenerateJuniorsTeamleadsLists(int n)
     {
-        return (GenerateEmployeeList(n), GenerateEmployeeList(n));
+        return (GenerateEmployeeList<Junior>(n), GenerateEmployeeList<Teamlead>(n));
     }
     public static (IEnumerable<Wishlist>, IEnumerable<Wishlist>) GenerateWishlists(IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors)
     {
@@ -31,7 +31,7 @@ public abstract class TestData
         );
     }
     public static IEnumerable<Team> GenerateTeams(
-        IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+        IEnumerable<Teamlead> teamleads, IEnumerable<Junior> juniors,
         IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
         )
     {
@@ -39,7 +39,7 @@ public abstract class TestData
         return manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
     }
 
-    public static (IEnumerable<Employee>, IEnumerable<Employee>, 
+    public static (IEnumerable<Teamlead>, IEnumerable<Junior>, 
             IEnumerable<Wishlist>, IEnumerable<Wishlist>, 
             IEnumerable<Team>, double) 
     GenerateAllForContest(int n)

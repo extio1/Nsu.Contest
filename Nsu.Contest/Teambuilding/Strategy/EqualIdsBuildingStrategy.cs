@@ -7,7 +7,7 @@ using Nsu.Contest.Teambuilding;
 public sealed class EqualIdsBuildingStrategy : ITeamBuildingStrategy
 {
     public IEnumerable<Team> BuildTeams(
-            IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+            IEnumerable<Teamlead> teamleads, IEnumerable<Junior> juniors,
             IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
         )
     {
@@ -22,8 +22,8 @@ public sealed class EqualIdsBuildingStrategy : ITeamBuildingStrategy
 
         var teams = new List<Team>();
 
-        var teamleadsList = new List<Employee>(teamleads);
-        var juniorsList = new List<Employee>(juniors);
+        var teamleadsList = new List<Teamlead>(teamleads);
+        var juniorsList = new List<Junior>(juniors);
 
         foreach (var teamlead in teamleadsList)
         {

@@ -17,7 +17,7 @@ public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
     /// <param name="juniorsWishlists"></param>
     /// <returns> Random distribution of team members </returns>
     public IEnumerable<Team> BuildTeams(
-            IEnumerable<Employee> teamleads, IEnumerable<Employee> juniors,
+            IEnumerable<Teamlead> teamleads, IEnumerable<Junior> juniors,
             IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
         )
     {
@@ -34,8 +34,8 @@ public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
         var randPermteamleads = RandomGenerator.GeneratePermutation(employeesCount);
         var randPermJuniors = RandomGenerator.GeneratePermutation(employeesCount);
 
-        var teamleadsList = new List<Employee>(teamleads);
-        var juniorsList = new List<Employee>(juniors);
+        var teamleadsList = new List<Teamlead>(teamleads);
+        var juniorsList = new List<Junior>(juniors);
 
         for (var i = 0; i < employeesCount; i++)
         {

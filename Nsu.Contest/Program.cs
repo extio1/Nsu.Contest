@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Hosting;
 
 using Nsu.Contest.Util;
-using Nsu.Contest.Contest;
 using Nsu.Contest.Director;
 using Nsu.Contest.Teambuilding;
 using Nsu.Contest.Teambuilding.Strategy;
+using Nsu.Contest.Contest;
+using Nsu.Contest.CommandProcessor;
 
 class Program
 {
@@ -14,7 +15,8 @@ class Program
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.Configure<Configuration>(context.Configuration.GetSection("Contest"));
+                services.Configure<ConfigurationContest>(context.Configuration.GetSection("Contest"));
+                services.Configure<ConfigurationDatabase>(context.Configuration.GetSection("DatabaseProduction"));
 
                 services.AddSingleton<ITeamBuildingStrategy, RandomTeamBuildingStrategy>();
                 services.AddSingleton<ITeamEstimatingStrategy, HarmonicMean>();
@@ -24,6 +26,7 @@ class Program
                 services.AddSingleton<Manager>();
 
                 services.AddHostedService<ContestRunner>();
+                // services.AddHostedService<CommandProcessor>();
             })
             .Build();
 
