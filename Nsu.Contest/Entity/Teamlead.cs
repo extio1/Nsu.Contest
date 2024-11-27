@@ -1,4 +1,7 @@
 namespace Nsu.Contest.Entity;
 
-public class Teamlead(int id, string name): Employee(id, name)
-{}
+public class Teamlead: Employee
+{
+    internal Teamlead(int id, string name): base(id, name) {}
+    
+}

@@ -1,6 +1,4 @@
-namespace Nsu.Contest.Util;
-
-using Nsu.Contest.Entity;
+namespace Nsu.Contest.Entity    ;
 
 public interface IWishlistGenerator
 {

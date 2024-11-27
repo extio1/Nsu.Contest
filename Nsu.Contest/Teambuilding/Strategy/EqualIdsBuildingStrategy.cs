@@ -6,6 +6,11 @@ using Nsu.Contest.Teambuilding;
 
 public sealed class EqualIdsBuildingStrategy : ITeamBuildingStrategy
 {
+    private readonly EntityFactory _entityFactory;
+    public EqualIdsBuildingStrategy(EntityFactory entityFactory)
+    {
+        _entityFactory = entityFactory;
+    }
     public IEnumerable<Team> BuildTeams(
             IEnumerable<Teamlead> teamleads, IEnumerable<Junior> juniors,
             IEnumerable<Wishlist> teamleadsWishlists, IEnumerable<Wishlist> juniorsWishlists
@@ -28,7 +33,7 @@ public sealed class EqualIdsBuildingStrategy : ITeamBuildingStrategy
         foreach (var teamlead in teamleadsList)
         {
             var junior = juniorsList.Find(j => teamlead.Id == j.Id);
-            teams.Add(new Team(teamlead, junior));
+            teams.Add(_entityFactory.CreateTeam(teamlead, junior));
         }
 
         return teams;

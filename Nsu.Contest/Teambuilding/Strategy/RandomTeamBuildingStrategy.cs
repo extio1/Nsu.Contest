@@ -7,6 +7,11 @@ using Microsoft.Extensions.Options;
 
 public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
 {
+    private readonly EntityFactory _entityFactory;
+    public RandomTeamBuildingStrategy(EntityFactory entityFactory) 
+    {
+        _entityFactory = entityFactory;
+    }
 
     /// <summary>
     /// Random algorithm of teambuilding.
@@ -39,7 +44,7 @@ public sealed class RandomTeamBuildingStrategy : ITeamBuildingStrategy
 
         for (var i = 0; i < employeesCount; i++)
         {
-            teams.Add(new Team(teamleadsList[randPermteamleads[i] - 1], juniorsList[randPermJuniors[i] - 1]));
+            teams.Add(_entityFactory.CreateTeam(teamleadsList[randPermteamleads[i] - 1], juniorsList[randPermJuniors[i] - 1]));
         }
 
         return teams;

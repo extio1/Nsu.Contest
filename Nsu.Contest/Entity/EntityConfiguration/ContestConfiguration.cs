@@ -11,7 +11,7 @@ internal class ContestConfiguration : IEntityTypeConfiguration<Contest>
 
        builder.HasKey(c => c.Id);
        builder.Property(c => c.Id).HasColumnName("Id");
-       builder.Property(c => c.Points)
+       builder.Property(c => c.Score)
               .HasColumnName("Points")
               .HasDefaultValue(0);
 

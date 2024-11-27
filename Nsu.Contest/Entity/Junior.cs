@@ -1,4 +1,7 @@
 namespace Nsu.Contest.Entity;
 
-public class Junior(int id, string name): Employee(id, name)
-{}
+public class Junior: Employee
+{
+    internal Junior(int id, string name): base(id, name)
+    {}
+}

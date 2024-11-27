@@ -3,18 +3,21 @@ namespace Nsu.Contest.Entity.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-internal class WishlistConfiguration: IEntityTypeConfiguration<Wishlist>
+internal class WishlistConfiguration : IEntityTypeConfiguration<Wishlist>
 {
     public void Configure(EntityTypeBuilder<Wishlist> builder)
     {
-        builder.ToTable("Team");
+        builder.ToTable("Wishlist");
 
-        builder.HasKey(t => t.Id);
-        
-        builder.Property(t => t.Id)
-                .HasColumnName("Id");
+        builder.HasKey(w => w.Id);
 
-        builder.HasOne(t => t.ForEmployee).WithMany();
-        builder.HasMany(t => t.DesiredEmployees).WithMany();
+        builder.Property(w => w.Id)
+               .HasColumnName("Id");
+
+        builder.HasOne(w => w.ForEmployee)
+               .WithMany()
+               .HasForeignKey(w => w.ForEmployeeId);
+
     }
 }
+

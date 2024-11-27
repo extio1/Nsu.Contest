@@ -4,7 +4,7 @@ namespace Nsu.Contest.Director;
 
 public class HarmonicMean : ITeamEstimatingStrategy
 {
-    public double Calculate(double[] inputSequence) {
+    public double Calculate(IEnumerable<double> inputSequence) {
         double sumReciprocals = 0.0;
 
         foreach (var num in inputSequence)
@@ -15,6 +15,9 @@ public class HarmonicMean : ITeamEstimatingStrategy
             sumReciprocals += 1 / num;
         }
 
-        return inputSequence.Length / sumReciprocals;
+        Console.WriteLine(inputSequence.Count());
+        Console.WriteLine(sumReciprocals);
+
+        return inputSequence.Count() / sumReciprocals;
     }
 }

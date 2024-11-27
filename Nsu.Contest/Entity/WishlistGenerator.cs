@@ -1,9 +1,14 @@
-namespace Nsu.Contest.Util;
+namespace Nsu.Contest.Entity;
 
-using Nsu.Contest.Entity;
+using Nsu.Contest.Util;
 
 public class WishlistGenerator : IWishlistGenerator
 {
+    private readonly EntityFactory _entityFactory;
+    public WishlistGenerator(EntityFactory entityFactory)
+    {
+        _entityFactory = entityFactory;
+    }
 
     public IEnumerable<Wishlist> GenerateWishlists(IEnumerable<Employee> forEmpls, IEnumerable<Employee> ofEmpls)
     {
@@ -20,10 +25,10 @@ public class WishlistGenerator : IWishlistGenerator
             var prioritiesForEmpl = RandomGenerator.GeneratePermutation(employeesCount);
             wishlists.Add
             (
-                new Wishlist
+                _entityFactory.CreateWishlist
                 (
                     forEmpl, 
-                    prioritiesForEmpl.Select(ind => ofEmpls.ElementAt(ind-1)).ToArray()
+                    prioritiesForEmpl.Select(ind => ofEmpls.ElementAt(ind-1)).ToArray().Select(e => e.Id).ToArray()
                 )
             );
         }
