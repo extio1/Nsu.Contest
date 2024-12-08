@@ -1,10 +1,9 @@
-using System.Data.Common;
+namespace Nsu.Contest.Contest;
+
 using Microsoft.EntityFrameworkCore;
 using Nsu.Contest.Database;
 using Nsu.Contest.Entity;
 using Nsu.Contest.Teambuilding;
-
-namespace Nsu.Contest.Contest;
 
 public class ContestService
 {
@@ -25,28 +24,23 @@ public class ContestService
         _wishlistGenerator = wishlistGenerator;
     }
 // using var transaction = dbContext.Database.BeginTransaction();
-    public void MakeContest()
+    public Contest MakeContest()
     {
         var juniors = _contestDbContext.Juniors.ToList();
         var teamleads = _contestDbContext.Teamleads.ToList();
 
         var juniorsWishlists = _wishlistGenerator.GenerateWishlists(juniors, teamleads);
-        var teamleadsWishlists = _wishlistGenerator.GenerateWishlists(juniors, teamleads);
-
+        var teamleadsWishlists = _wishlistGenerator.GenerateWishlists(teamleads, juniors);
         var teams = _manager.BuildTeams(teamleads, juniors, teamleadsWishlists, juniorsWishlists);
-
-        Console.WriteLine("Teams");
-
+        
         var score = _director.EstimateTeams(juniorsWishlists, teamleadsWishlists, teams);
 
-        Console.WriteLine("Estimated", score);
-
-        _factory.CreateContest(teamleads, juniors, teams, score);
-
-        Console.WriteLine("Contest", score);
+        var contest = _factory.CreateContest(teamleads, juniors, teams, score);
 
         int entries_count = _contestDbContext.SaveChanges();
-        Console.WriteLine(entries_count);
+        Console.WriteLine($"Database saved {entries_count} entries for {contest.Id} contest!");
+    
+        return contest;
     }
 
     public void LogToConsoleContestInfo(Guid id)
@@ -70,10 +64,8 @@ public class ContestService
         }
     }
 
-    public double CalculateHarmonicMeanForAll()
+    static public double CalculateHarmonicMeanFor(IEnumerable<Contest> contests)
     {
-        var contests = _contestDbContext.Contests;
-        
         var sum = 0.0;
         foreach (var contest in contests)
         {
@@ -81,5 +73,11 @@ public class ContestService
         }
 
         return sum / contests.Count();
+    }
+
+    public double CalculateHarmonicMeanForAll()
+    {
+        var contests = _contestDbContext.Contests;
+        return CalculateHarmonicMeanFor(contests);
     }
 }

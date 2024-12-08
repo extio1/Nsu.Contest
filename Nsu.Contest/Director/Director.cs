@@ -26,18 +26,10 @@ public class Director
             throw new ArgumentException("All three collections must be the same length.");
         }
 
-        Console.WriteLine($"All points: ");
-
         var juniorsPoints = teams.Select(t => t.Junior.GetSatisfactionPoint(juniorsWishlists, t.Teamlead));
-        Console.WriteLine($"1");
         var teamleadPoints = teams.Select(t => t.Teamlead.GetSatisfactionPoint(teamleadsWishlists, t.Junior));
-        Console.WriteLine($"2");
 
         var points = juniorsPoints.Concat(teamleadPoints);
-        foreach (var item in points)
-        {
-            Console.WriteLine(item);
-        }
 
         return _estimatingStrategy.Calculate(points);
     }

@@ -21,10 +21,6 @@ public class ContestDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ContestDbContext).Assembly);
-        // modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-        // modelBuilder.ApplyConfiguration(new TeamConfiguration());
-        // modelBuilder.ApplyConfiguration(new ContestConfiguration());
-        // modelBuilder.ApplyConfiguration(new WishlistConfiguration());
     }
 }
 

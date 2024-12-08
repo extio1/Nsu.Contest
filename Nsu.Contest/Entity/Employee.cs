@@ -2,7 +2,7 @@ namespace Nsu.Contest.Entity;
 
 public class Employee
 {
-    internal Employee(int id, string name)
+    public Employee(int id, string name)
     {
         Id = id;
         Name = name;
@@ -13,9 +13,9 @@ public class Employee
 
     public double GetSatisfactionPoint(IEnumerable<Wishlist> emplsWishlists, Employee teammate)
     {
-
-        var emplWishlist = emplsWishlists.First(e => e.ForEmployee.Id == Id);
-        return emplsWishlists.Count() - Array.IndexOf(emplWishlist.DesiredEmployees.ToArray(), teammate.Id);
+        var emplWishlist = emplsWishlists.First(e => e.ForEmployeeId == Id);
+        var index = Array.IndexOf(emplWishlist.DesiredEmployees.ToArray(), teammate.Id);
+        return emplsWishlists.Count() - index;
     }
 }
 

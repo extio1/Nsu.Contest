@@ -177,7 +177,7 @@ namespace Nsu.Contest.Migrations
                 migrationBuilder.InsertData(
                     table: "Employees",
                     columns: new[] { "Id", "Name", "EmployeeType" },
-                    values: new object[] { j.Id, j.Name, "Teamlead" }
+                    values: new object[] { j.Id, j.Name, "Junior" }
                 );
             }
 
